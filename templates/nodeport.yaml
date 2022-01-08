@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "prueba-k8-helmchart.fullname" . }}-nodeport
+  labels:
+    {{- include "prueba-k8-helmchart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.nodePort.type }}
+  ports:
+    - port: {{ .Values.nodePort.port }}
+      targetPort: {{ .Values.nodePort.targetPort }}
+      nodePort: {{ .Values.nodePort.highPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "prueba-k8-helmchart.selectorLabels" . | nindent 4 }}
