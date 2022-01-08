@@ -49,18 +49,18 @@ jobs:
     - name: Terraform Plan
       run: terraform plan
       
-    - name: Terraform apply
-      run: terraform apply -auto-approve -input=false
+    # - name: Terraform apply
+    #   run: terraform apply -auto-approve -input=false
 
     - name: Get repositories
       uses: hiberbee/github-action-helm@1.5.0
       with:
         helm: repo list
-        repository-config: test/repositories.yaml
+        repository-config: charts/repositories.yaml
 
     - name: Lint chart
-      run: helm lint nginx
-      working-directory: test/charts
+      run: helm lint app
+      working-directory: charts
 
 #       - name: Install release
 #         uses: hiberbee/github-action-helm@latest
