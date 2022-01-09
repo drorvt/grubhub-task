@@ -30,7 +30,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           cluster_name: eks_cluster_dror
-          args: kubectl get pod -A
+          args: set image --record deployment/coredns pod-name=${{ steps.build.outputs.IMAGE_URL }}
       # --- #
       - name: Use the output
         run: echo "{{ steps.kubectl.outputs.kubectl-out }}"
