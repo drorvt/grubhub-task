@@ -17,41 +17,25 @@ jobs:
           aws-region: us-east-1
           
 
-  jobName:
-    name: Update deploy
-    runs-on: ubuntu-latest 
-    steps:
-      # --- #
-      - name: Build and push CONTAINER_NAME
-        id: kubectl
-        uses: ianbelcher/eks-kubectl-action@master
+
+      - name: Deploy
+        uses: scalive/github-action-eks-helm@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: us-east-1
-          cluster_name: eks_cluster_dror
-          args: set image --record deployment/coredns pod-name=${{ steps.build.outputs.IMAGE_URL }}
-      # --- #
-      - name: Use the output
-        run: echo "{{ steps.kubectl.outputs.kubectl-out }}"
+          args: helm upgrade --install demo-flask-app ./charts
         
 #       - name: Helm Lint
 #         uses: WyriHaximus/github-action-helm3@v2
 #         with:
 #           exec: helm lint ./charts
+          
 #       - name: Helm install
 #         uses: WyriHaximus/github-action-helm3@v2
 #         with:
 #           exec: helm upgrade --install demo-flask-app ./charts
 #           kubeconfig: '${{ secrets.KUBECONFIG }}'
 
-      - name: Get URL
-        id: url
-        uses: koslib/helm-eks-action@master
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          command: kubectl get svc my_svc -o json | jq -r '.status.loadBalancer.ingress[0].hostname'
 
-      - name: Print Response
-        run: echo "Response was ${{ steps.url.outputs.response }}"
+#       - name: Print Response
+#         run: echo "Response was ${{ steps.url.outputs.response }}"
