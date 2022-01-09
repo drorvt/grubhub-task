@@ -28,7 +28,7 @@ jobs:
         with:
           release: 'nginx'
           namespace: 'default'
-          chart: 'app'
+          chart: 'charts'
           token: '${{ github.token }}'
           values: |
             name: foobar
