@@ -23,7 +23,7 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: helm upgrade --install demo-flask-app ./charts
+          args: helm upgrade --install app ./charts
         
 #       - name: Helm Lint
 #         uses: WyriHaximus/github-action-helm3@v2
