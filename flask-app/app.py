@@ -1,6 +1,9 @@
 from flask import Flask
 from flask import request
 from kubernetes import client, config
+from flask import jsonify
+from server import app
+
 
 app = Flask(__name__)
 @app.route('/pods')
@@ -31,8 +34,9 @@ def get_ip():
 
 @app.route("/health")
 def health():
-    return "“OK {ENV}”"
-
+    """health route"""
+    state = {"status": "UP"}
+    return jsonify(state)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
