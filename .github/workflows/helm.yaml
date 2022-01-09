@@ -1,5 +1,7 @@
-name: deploy
+name: CI
 
+on:
+  - push
 
 jobs:
   deploy:
@@ -7,21 +9,41 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: AWS Credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: helm deploy          
-        uses: craftech-io/eks-helm-deploy-action@v1
+      - name: Deploy
+        uses: scalive/github-action-eks-helm@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS__KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-          cluster-name: eks_cluster_dror
-          config-files: .github/charts/values.yaml
-          chart-path: charts/
-          namespace: default
-          name: test
+          args: helm ls
+          
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       - name: AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: us-east-1
+
+#       - name: helm deploy          
+#         uses: craftech-io/eks-helm-deploy-action@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS__KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: us-east-1
+#           cluster-name: eks_cluster_dror
+#           config-files: .github/charts/values.yaml
+#           chart-path: charts/
+#           namespace: default
+#           name: test
