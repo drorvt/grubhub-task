@@ -17,16 +17,33 @@ jobs:
           aws-region: us-east-1
           
 
-
-      - name: Helm Lint
-        uses: WyriHaximus/github-action-helm3@v2
+  jobName:
+    name: Update deploy
+    runs-on: ubuntu-latest 
+    steps:
+      # --- #
+      - name: Build and push CONTAINER_NAME
+        id: kubectl
+        uses: ianbelcher/eks-kubectl-action@master
         with:
-          exec: helm lint ./charts
-      - name: Helm install
-        uses: WyriHaximus/github-action-helm3@v2
-        with:
-          exec: helm upgrade --install demo-flask-app ./charts
-          kubeconfig: '${{ secrets.KUBECONFIG }}'
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
+          cluster_name: eks_cluster_dror
+          args: set image --record deployment/pod-name pod-name=${{ steps.build.outputs.IMAGE_URL }}
+      # --- #
+      - name: Use the output
+        run: echo "{{ steps.kubectl.outputs.kubectl-out }}"
+        
+#       - name: Helm Lint
+#         uses: WyriHaximus/github-action-helm3@v2
+#         with:
+#           exec: helm lint ./charts
+#       - name: Helm install
+#         uses: WyriHaximus/github-action-helm3@v2
+#         with:
+#           exec: helm upgrade --install demo-flask-app ./charts
+#           kubeconfig: '${{ secrets.KUBECONFIG }}'
 
       - name: Get URL
         id: url
