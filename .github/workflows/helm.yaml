@@ -16,43 +16,28 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Setting kubeconfig
-        uses: azure/k8s-set-context@v1
+      - uses: azure/setup-helm@v1
         with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
-        id: setcontext
-
-      - uses: mirzakhany/helm-install-action@v1
+          version: '3.5.2' # our current server version
+      - uses: azure/setup-kubectl@v1
         with:
-          k8s_config: ${{ secrets.KUBE_CONFIG_DATA }}
+          version: 'v1.21.0' # default is latest stable
+        id: install
 
-      - name: deploy app
-        shell: bash
-        run: helm install  release-name ./charts
+      # Checkout the helm repository  
+      - name: Checkout texel-helm-charts
+        uses: actions/checkout@v2
+        with:
+          repository: drorvt/grubhub-task
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: '0'
+          
+      # Deploy chart to GKE cluster 
+      - name: Deploy rms-management-strategy chart
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name eks_cluster_dror
+          kubectl get pods -A
+          helm upgrade --install demo-flask-app ./charts
 
         
-#       - name: Deploy
-#         uses: scalive/github-action-eks-helm@master
-#         env:
-#           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-#         with:
-#           args: helm ls
-          
 
-          
-          
-#       - name: Helm Lint
-#         uses: WyriHaximus/github-action-helm3@v2
-#         with:
-#           exec: helm lint ./charts
-          
-#       - name: Helm install
-#         uses: WyriHaximus/github-action-helm3@v2
-#         with:
-#           exec: helm upgrade --install demo-flask-app ./charts
-#           kubeconfig: '${{ secrets.KUBECONFIG }}'
-
-
-#       - name: Print Response
-#         run: echo "Response was ${{ steps.url.outputs.response }}"
