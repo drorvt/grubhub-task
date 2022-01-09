@@ -29,3 +29,11 @@ $ ./automation.sh
 $ helm install demo-flask-app . -n default
 
 ```
+### Run github action ci :
+```bash
+### install EKS :
+goto actions press on terraform and run workflows
+
+### deploy helm app :
+goto actions press on HELM and run workflows
+```
