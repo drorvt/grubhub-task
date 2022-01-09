@@ -22,7 +22,8 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           plugins: "https://github.com/jkroepke/helm-secrets"
-          args: helm upgrade --install demo-flask-app  -f charts/values.yaml
+          args: helm upgrade  demo-flask-app --install -f charts/values.yaml  ./charts
+          
           
 
 
