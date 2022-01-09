@@ -21,7 +21,7 @@ jobs:
       - name: Helm Lint
         uses: WyriHaximus/github-action-helm3@v2
         with:
-          exec: helm lint ./helm-chart
+          exec: helm lint ./charts
       - name: Helm install
         uses: WyriHaximus/github-action-helm3@v2
         with:
