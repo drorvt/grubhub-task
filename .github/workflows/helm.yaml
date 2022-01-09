@@ -16,6 +16,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::797357964006:role/eks-node-group-tuto
+          aws-region: us-east-1
+          
       - name: Deploy
         uses: scalive/github-action-eks-helm@master
         env:
