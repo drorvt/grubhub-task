@@ -16,31 +16,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           
-      - name: Setup kubeconfig
-        id: setup-kubeconfig
-        run: |
-          aws eks --region us-east-1 update-kubeconfig --name eks_cluster_dror
-#       - name: Deploy
-#         uses: scalive/github-action-eks-helm@master
-#         env:
-#           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-#         with:
-#           args: helm upgrade  demo-flask-app --install -f charts/values.yaml charts
-          
-      - name: Copy kubectl config to output for helm deploy
-        id: kube
-        run: |
-          CONFIG="$(cat ${HOME}/.kube/config)"
-          CONFIG="${CONFIG//'%'/'%25'}"
-          CONFIG="${CONFIG//$'\n'/'%0A'}"
-          CONFIG="${CONFIG//$'\r'/'%0D'}"
-          echo "::set-output name=config::$CONFIG"
 
+
+      - name: Helm Lint
+        uses: WyriHaximus/github-action-helm3@v2
+        with:
+          exec: helm lint ./helm-chart
       - name: Helm install
         uses: WyriHaximus/github-action-helm3@v2
         with:
-          exec: helm upgrade --install dror ./charts
-          kubeconfig: '${{ steps.kube.outputs.config }}'
+          exec: helm upgrade --install demo-flask-app ./charts
+          kubeconfig: '${{ secrets.KUBECONFIG }}'
 
       - name: Get URL
         id: url
