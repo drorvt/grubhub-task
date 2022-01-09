@@ -16,6 +16,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           
+      - name: Setup kubeconfig
+        id: setup-kubeconfig
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name eks_cluster_dror
 #       - name: Deploy
 #         uses: scalive/github-action-eks-helm@master
 #         env:
