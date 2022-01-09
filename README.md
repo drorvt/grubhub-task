@@ -9,36 +9,14 @@ $: docker build -t drorvt/flask_app:1.0
 
 You need to have all requirements installed.
 
-### Local execution
+##Run automated deployment script
 
-```
-DOCKER="python-app"
-HELM_APP="app"
+Run the deployment script, automation.sh. For this you need to run the following command:
 
-#Clone repository
-git clone https://github.com/drorvt/grubhub-task
-
-#Install dependencies locally assuming you have Mac machine and brew installed
-#Python 
-brew install python
-#Pip
-sudo easy_install pip
-#Flask
-pip3 install -r requirements.txt
-#Helm 
-brew install helm
-```
-
-### Run in Docker (meinheld)
 
 ```bash
-#Make docker build to get image python-app:latest
-cd flask-server
-docker build -t $DOCKER:latest .
-cd ..
-echo "BUILD done"
-echo "IMAGE $DOCKER:latest listed"
-docker container ls
+$ chmod +x automation.sh
+$ ./automation.sh
 ```
 
 ### Run in Kubernetes (Helm)
