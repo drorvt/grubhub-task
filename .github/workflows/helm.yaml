@@ -22,18 +22,16 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
         id: setcontext
-      - name: test
-        uses: peymanmortazavi/eks-helm-deploy@v1
+
+      - uses: mirzakhany/helm-install-action@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS__KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-          cluster-name: eks_cluster_dror
-          config-files: .github/charts/values.yaml
-          namespace: default
-          name: app
-          chart-path: .github/charts/
-          
+          k8s_config: ${{ secrets.KUBE_CONFIG_DATA }}
+
+      - name: deploy app
+        shell: bash
+        run: helm install  release-name ./charts
+
+        
 #       - name: Deploy
 #         uses: scalive/github-action-eks-helm@master
 #         env:
