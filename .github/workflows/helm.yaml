@@ -27,12 +27,24 @@ jobs:
 #         with:
 #           args: helm upgrade  demo-flask-app --install -f charts/values.yaml charts
           
-          
-      - name: Helm install
+      - name: Copy kubectl config to output for helm deploy
+        id: kube
+        run: |
+          CONFIG="$(cat ${HOME}/.kube/config)"
+          CONFIG="${CONFIG//'%'/'%25'}"
+          CONFIG="${CONFIG//$'\n'/'%0A'}"
+          CONFIG="${CONFIG//$'\r'/'%0D'}"
+          echo "::set-output name=config::$CONFIG"
+      - name: Deploy
         uses: WyriHaximus/github-action-helm3@v2
         with:
           exec: helm upgrade --install dror ./charts
-          kubeconfig: '${{ secrets.KUBE_CONFIG_DATA }}'
+          kubeconfig: '${{ steps.kube.outputs.config }}'
+#       - name: Helm install
+#         uses: WyriHaximus/github-action-helm3@v2
+#         with:
+#           exec: helm upgrade --install dror ./charts
+#           kubeconfig: '${{ secrets.KUBE_CONFIG_DATA }}'
 
       - name: Get URL
         id: url
