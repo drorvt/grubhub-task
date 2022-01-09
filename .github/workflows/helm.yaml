@@ -22,10 +22,22 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
         id: setcontext
- 
-      - name: Print kubectl & kustomize versions
-        run: |-
-          kubectl version
+        
+      - name: 'Deploy'
+        uses: 'deliverybot/helm@v1'
+        with:
+          release: 'nginx'
+          namespace: 'default'
+          chart: 'app'
+          token: '${{ github.token }}'
+          values: |
+            name: foobar
+          value-files: >-
+            [
+            "values.yaml"
+            ]
+        env:
+          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
           
 #       - name: Deploy
 #         uses: scalive/github-action-eks-helm@master
@@ -34,16 +46,7 @@ jobs:
 #         with:
 #           args: helm ls
           
-      - name: Deploy 
-        uses: peymanmortazavi/eks-helm-deploy@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS__KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region:  us-east-1
-          cluster-name: eks_cluster_dror
-          config-files: .github/charts/values.yaml
-          name: app
-          chart-path: .github/charts
+
           
           
 #       - name: Helm Lint
