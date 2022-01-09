@@ -37,14 +37,14 @@ spec:
             - name: python
               containerPort: {{ .Values.image.port }}
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.image.port }}
-          readinessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.image.port }}
+#           livenessProbe:
+#             httpGet:
+#               path: /
+#               port: {{ .Values.image.port }}
+#           readinessProbe:
+#             httpGet:
+#               path: /
+#               port: {{ .Values.image.port }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
