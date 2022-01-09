@@ -21,7 +21,7 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: helm upgrade  demo-flask-app --install -f charts/values.yaml  ./charts
+          args: helm upgrade  demo-flask-app --install -f charts/values.yaml
           
           
 
