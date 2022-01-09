@@ -21,6 +21,18 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: helm upgrade --install demo-flask-app . -n default  -f charts/values.yaml
+          plugins: "https://github.com/jkroepke/helm-secrets"
+          args: helm upgrade --install demo-flask-app  -f charts/values.yaml
           
 
+
+      - name: Get URL
+        id: url
+        uses: koslib/helm-eks-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          command: kubectl get svc my_svc -o json | jq -r '.status.loadBalancer.ingress[0].hostname'
+
+      - name: Print Response
+        run: echo "Response was ${{ steps.url.outputs.response }}"
