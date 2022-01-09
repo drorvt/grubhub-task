@@ -22,22 +22,17 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
         id: setcontext
-        
-      - name: 'Deploy'
-        uses: 'deliverybot/helm@v1'
+      - name: test
+        uses: peymanmortazavi/eks-helm-deploy@v1
         with:
-          release: 'nginx'
-          namespace: 'default'
-          chart: 'charts'
-          token: '${{ github.token }}'
-          values: |
-            name: foobar
-          value-files: >-
-            [
-            "values.yaml"
-            ]
-        env:
-          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS__KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          cluster-name: eks_cluster_dror
+          config-files: .github/charts/values.yaml
+          namespace: default
+          name: app
+          chart-path: .github/charts/
           
 #       - name: Deploy
 #         uses: scalive/github-action-eks-helm@master
