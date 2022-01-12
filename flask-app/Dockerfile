@@ -6,9 +6,6 @@ COPY ./requirements.txt /requirements.txt
 WORKDIR /
 #Install dependencies
 RUN pip3 install -r requirements.txt
-# RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" \
-#     && chmod +x ./kubectl \
-#     && mv ./kubectl /usr/local/bin/kubectl
 COPY . /
 EXPOSE 5000
 ENTRYPOINT [ "python3" ]
