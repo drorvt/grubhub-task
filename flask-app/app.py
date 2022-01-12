@@ -1,19 +1,25 @@
 from flask import Flask
 from flask import request
-from kubernetes import client, config
 from flask import jsonify
-from server import app
+from requests.utils import default_headers
+from kubernetes import client, config, watch
+import os
 
 
 app = Flask(__name__)
+@app.route('/')
+def index():
+    return 'Web App with Python Flask!'
+    
 @app.route('/pods')
 def get_pod():
-    config.load_kube_config()
+    #config.load_kube_config()
 
+    config.load_incluster_config()
     v1 = client.CoreV1Api()
+    
     print("Listing pods with their IPs:")
     ret = v1.list_pod_for_all_namespaces(watch=False)
-    squares = []
     for i in ret.items:
         print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
     
@@ -21,12 +27,12 @@ def get_pod():
 
 @app.route('/me')
 def get_ip():
-    config.load_kube_config()
+    #config.load_kube_config()
 
+    config.load_incluster_config()
     v1 = client.CoreV1Api()
     print("Listing pods with their IPs:")
     ret = v1.list_pod_for_all_namespaces(watch=False)
-    squares = []
     for i in ret.items:
         print("%s" % (i.status.pod_ip))
     
