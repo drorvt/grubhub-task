@@ -19,11 +19,9 @@ jobs:
         - name: Login to DockerHub Registry/
           run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           
-          
         - name: Build the tagged Docker image
           run: |
             cd flask-app
-            ls -ltr 
             docker build . -t drorvt/flaskapp:v1
           
         - name: Push the tagged Docker image
