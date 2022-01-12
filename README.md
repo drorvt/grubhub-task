@@ -24,6 +24,8 @@ $ helm install demo-flask-app . -n default
 ### install EKS :
 goto actions press on terraform and run workflows
 
+$: aws eks --region us-east-1 update-kubeconfig --name eks_cluster_dror
+
 ### deploy helm app :
 goto actions press on HELM and run workflows
 ```
