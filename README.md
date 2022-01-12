@@ -25,6 +25,7 @@ $ helm install demo-flask-app . -n default
 goto actions press on terraform and run workflows
 
 $: aws eks --region us-east-1 update-kubeconfig --name eks_cluster_dror
+$: kubectl apply -f RBAC.yaml
 
 ### deploy helm app :
 goto actions press on HELM and run workflows
@@ -32,7 +33,7 @@ goto actions press on HELM and run workflows
 ### verify route working 
 
 ```bash
-$: kubectl --namespace default port-forward svc/appflask-k8-helm  32077:5000
+$: kubectl --namespace default port-forward svc/<name service>  32077:5000
 $: Open in Browser :
 "http://localhost:32077/pods"
 "http://localhost:32077/me"
